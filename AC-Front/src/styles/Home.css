@@ -1,0 +1,21 @@
+.home-container {
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    width: 100%;
+    height: 100%;
+}
+
+/* layouts */
+.home-content {
+    border-left: 1px solid #ccc; /* 왼쪽에 라인 추가 */
+    border-right: 1px solid #ccc; /* 오른쪽에 라인 추가 */
+    padding-left: 20px; /* 왼쪽 라인과 내용 사이의 간격 */
+    padding-right: 20px; /* 오른쪽 라인과 내용 사이의 간격 */
+}
+
+
+/* titles */
+.home-main-title, .home-sidebar-notion-title, .home-sidebar-contact-title {
+    font-family: 'LexendMega';
+    font-size: 1.25rem;
+}

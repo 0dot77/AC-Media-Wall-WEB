@@ -1,0 +1,65 @@
+.DS_Store
+# Node modules
+AC-Front/node_modules/
+
+# Build output
+AC-Front/build/
+AC-Front/dist/
+
+# Temporary files
+AC-Front/*.log
+AC-Front/*.tmp
+AC-Front/*.swp
+
+# Environment variables
+AC-Front/.env
+AC-Front/.env.local
+AC-Front/.env.development.local
+AC-Front/.env.test.local
+AC-Front/.env.production.local
+
+# Editor directories and files
+AC-Front/.vscode/
+AC-Front/.idea/
+AC-Front/*.sublime-workspace
+AC-Front/*.sublime-project
+
+# MacOS files
+AC-Front/.DS_Store
+
+# Windows files
+AC-Front/Thumbs.db
+
+# Coverage directory used by testing tools
+AC-Front/coverage/
+
+# Yarn Integrity file
+AC-Front/.yarn-integrity
+
+# Parcel-bundler cache
+AC-Front/.cache/
+
+# Next.js build output
+AC-Front/.next/
+
+# Nuxt.js build output
+AC-Front/.nuxt/
+
+# Gatsby files
+AC-Front/.cache/
+AC-Front/public/
+
+# Log files
+AC-Front/npm-debug.log*
+AC-Front/yarn-debug.log*
+AC-Front/yarn-error.log*
+
+# Optional npm cache directory
+AC-Front/.npm/
+
+# AC-Server
+AC-Server/node_modules/
+AC-Server/uploads/
+AC-Server/database.db
+
+
