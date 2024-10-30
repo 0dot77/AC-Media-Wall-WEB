@@ -1,8 +1,7 @@
 import '../styles/Home.css'
-import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+
 function Home() {
-    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
@@ -12,16 +11,14 @@ function Home() {
         poster: null as File | null,
         password: '',
     });
-    
-    // Hooks
-    const handleNavigate = (path: string) => {
-        navigate(`/${path}`);
-    }
+    const [preview, setPreview] = useState<string | null>(null);
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name,value,files} = e.target;
         if(name === 'poster' && files) {
             setFormData({...formData, [name]: files[0]});
+            setPreview(URL.createObjectURL(files[0]));
         } else {
             setFormData({...formData, [name]: value});
         }
@@ -50,32 +47,35 @@ function Home() {
             console.error('Error uploading file:', error);
         } 
 
-        console.log(data);
+        //console.log(data);
     }
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        const files = e.dataTransfer.files;
+
+        if(files && files[0])
+        {
+            setFormData({...formData, poster: files[0]});
+            setPreview(URL.createObjectURL(files[0]));
+        }
+    };
+
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+    };
+
+
 
 
     return (
         <div className='home-container'>
-            <div className='home-main'>
-                <div className='home-main-title'>
-                    <h1>IMW</h1>
-                </div>
-                <div className='home-main-nav'>
-                    <nav>
-                        <ul>
-                            <li onClick={() => handleNavigate('')}>새로운 포스터 업로드</li>
-                            <li onClick={() => handleNavigate('now')}>현재 포스터</li>
-                            <li onClick={() => handleNavigate('previous')}>지난 포스터 보기</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
             <div className='home-content'>
                 <div className='home-content-register-info'>
                     <h2>등록자 정보</h2>
                 <form className='register-form'>
                     <div className='form-group'>
-                        <label htmlFor='name'>이름</label>
+                        <label htmlFor='name'>1. 이름</label>
                         <input 
                             type='text'
                             id='name'
@@ -86,7 +86,7 @@ function Home() {
                         />
                     </div>
                     <div className='form-group'>
-                        <label htmlFor='phone'>전화번호</label>
+                        <label htmlFor='phone'>2. 전화번호</label>
                         <input
                             type='tel' 
                             id='phone'
@@ -103,7 +103,7 @@ function Home() {
                     <h2>공연 정보</h2>
                 <form className='performance-form'>
                     <div className='form-group'>
-                        <label htmlFor='period'>게시 기간</label>
+                        <label htmlFor='period'>1. 게시 기간</label>
                         <div className='period-inputs'>
                             <input
                                 type='date'
@@ -123,7 +123,7 @@ function Home() {
                         </div>
                     </div>
                     <div className='form-group'>
-                        <label htmlFor='title'>공연명</label>
+                        <label htmlFor='title'>2. 공연명</label>
                         <input
                             type='text'
                             id='title'
@@ -134,17 +134,29 @@ function Home() {
                         />
                     </div>
                     <div className='form-group'>
-                        <label htmlFor='poster'>포스터 이미지</label>
-                        <input
-                            type='file'
-                            id='poster'
-                            name='poster'
-                            accept='image/*'
-                            onChange={handleChange}
+                        <label htmlFor='poster'>3. 포스터 이미지 업로드</label>
+                        <div className="upload-box" onDrop={handleDrop} onDragOver={handleDragOver}>
+                            {preview ? (
+                                <img src={preview} alt='포스터 이미지' className='image-preview' />
+                            ) : (
+                                <>
+                                    <div className="upload-icon">📂</div>
+                                    <p>이곳에 이미지를 끌어넣어주세요</p>
+                                </>
+                            )}
+                        </div>
+                        <div className='file-info'>
+                            <input
+                                type='file'
+                                id='poster'
+                                name='poster'
+                                accept='image/*'
+                                onChange={handleChange}
                         />
+                        </div>
                     </div>
                     <div className='form-group'>
-                        <label htmlFor='password'>비밀번호</label>
+                        <label htmlFor='password'>4. 비밀번호</label>
                         <input
                             type='password'
                             id='password'
@@ -156,30 +168,8 @@ function Home() {
                     </div>
                 </form>
                 </div>
-                <button className='home-content-register-button' onClick={handleSubmit}>SAVE</button>
-            </div>
-
-            <div className='home-sidebar'>
-                <div className='home-sidebar-text'>
-                    <h3>이곳은 한국예술종합학교 이어령 예술극장 미디어월에 삽입되는 공연 포스터를 업로드할 수 있는 웹페이지 입니다. 아래의 내용을 확인하여 미디어월에 새로운 포스터를 업로드 할 수 있습니다.</h3>
-                </div>
-                <div className='home-sidebar-notion'>
-                    <div className='home-sidebar-notion-title'>
-                        <h3>Notion</h3>
-                    </div>
-                    <div className='home-sidebar-notion-contents'>
-                        <p>파일 크기 : 10MB 이하</p>
-                        <p>파일 형식 : jpg, png</p>
-                        <p>최적 사이즈 : 1080 * 340 (px)</p>
-                    </div>
-                </div>
-                <div className='home-sidebar-contact'>
-                    <div className='home-sidebar-contact-title'>
-                        <h3>Contact</h3>
-                    </div>
-                    <div className='home-sidebar-contact-phone'>
-                        <p>010-9964-3323</p>
-                    </div>
+                <div className='home-content-register-button-container'>
+                    <button className='home-content-register-button' onClick={handleSubmit}>Save</button>
                 </div>
             </div>
         </div>
